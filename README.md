@@ -645,12 +645,6 @@ SELECT TOP 10 * FROM gold.report_customer_risk_summary;
 ### "What would you improve?"
 > *"Immediate priorities would be: (1) Incremental loading to replace full truncate-and-load, enabling daily or weekly refreshes; (2) ETL logging to an audit table for better operational visibility; (3) SCD Type 2 for customer dimension to track historical changes; (4) Query performance optimization with strategic indexing; (5) Automated scheduling using SQL Agent; (6) Power BI dashboard deployment; (7) eventually migrating to cloud platforms like Azure SQL or Snowflake."*
 
-</details>
-
-> 📋 Full interview prep with 70 Q&As: [`docs/interview_questions.md`](docs/interview_questions.md)
-
----
-
 ## 🚀 Future Improvements
 
 | Priority | Enhancement | Complexity | Status |

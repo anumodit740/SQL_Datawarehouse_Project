@@ -149,52 +149,52 @@ This data warehouse transforms **60M+ raw records** across 8 source tables into 
 ## 🏛️ Architecture Overview
 
 ```
-┌───────────────────────────────────────────────────────────────────┐
-│                        SOURCE LAYER                                 │
-│  Kaggle CSV Files (8 tables, ~60M+ records)                        │
-└────────────────────────┬────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────┐
+│                        SOURCE LAYER                             │
+│  Kaggle CSV Files (8 tables, ~60M+ records)                    │
+└────────────────────────┬────────────────────────────────────────┘
                          │ BULK INSERT
                          ▼
-┌───────────────────────────────────────────────────────────────────┐
-│  🥉 BRONZE LAYER              Raw Data Ingestion                    │
-│  ───────────────────────────────────────────────────────────────────│
-│  • Exact replica of source files                                    │
-│  • All columns NVARCHAR(255) — no type casting                     │
-│  • Truncate & Load strategy                                         │
-│  • Data lineage via dwh_load_date                                  │
-│  • Rows: ~60M+ | Tables: 8 | Size: 15-20 GB                       │
-└────────────────────────┬────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────┐
+│  🥉 BRONZE LAYER              Raw Data Ingestion                │
+│  ────────────────────────────────────────────────────────────   │
+│  • Exact replica of source files                                │
+│  • All columns NVARCHAR(255) — no type casting                 │
+│  • Truncate & Load strategy                                     │
+│  • Data lineage via dwh_load_date                              │
+│  • Rows: ~60M+ | Tables: 8 | Size: 15-20 GB                   │
+└────────────────────────┬────────────────────────────────────────┘
                          │ Stored Procedures
                          ▼
-┌───────────────────────────────────────────────────────────────────┐
-│  🥈 SILVER LAYER              Cleaned & Standardized                │
-│  ───────────────────────────────────────────────────────────────────│
-│  • Type casting (TRY_CAST) & NULL handling                         │
-│  • Categorical standardization (M→Male, Y→Yes)                     │
-│  • 20+ derived columns (age_years, risk ratios, payment flags)     │
-│  • Business rule application                                        │
-│  • Rows: ~60M+ | Tables: 8 | Size: 20-30 GB                       │
-└────────────────────────┬────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────┐
+│  🥈 SILVER LAYER              Cleaned & Standardized            │
+│  ────────────────────────────────────────────────────────────   │
+│  • Type casting (TRY_CAST) & NULL handling                     │
+│  • Categorical standardization (M→Male, Y→Yes)                 │
+│  • 20+ derived columns (age_years, risk ratios, payment flags) │
+│  • Business rule application                                    │
+│  • Rows: ~60M+ | Tables: 8 | Size: 20-30 GB                   │
+└────────────────────────┬────────────────────────────────────────┘
                          │ Views (Star Schema)
                          ▼
-┌───────────────────────────────────────────────────────────────────┐
-│  🏆 GOLD LAYER                Business-Ready Analytics              │
-│  ───────────────────────────────────────────────────────────────────│
-│  • dim_customer (demographics & profile)                            │
-│  • fact_loan_application (financial metrics & default flag)         │
-│  • fact_payment_behavior (aggregated payment patterns)              │
-│  • fact_credit_history (bureau credit summary)                      │
-│  • report_customer_risk_summary (risk segmentation mart)           │
-│  • Rows: ~307K dimension + aggregated facts | Size: 10-15 GB       │
-└────────────────────────┬────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────┐
+│  🏆 GOLD LAYER                Business-Ready Analytics          │
+│  ────────────────────────────────────────────────────────────   │
+│  • dim_customer (demographics & profile)                        │
+│  • fact_loan_application (financial metrics & default flag)     │
+│  • fact_payment_behavior (aggregated payment patterns)          │
+│  • fact_credit_history (bureau credit summary)                  │
+│  • report_customer_risk_summary (risk segmentation mart)        │
+│  • Rows: ~307K dimension + aggregated facts | Size: 10-15 GB   │
+└────────────────────────┬────────────────────────────────────────┘
                          │
                          ▼
-┌───────────────────────────────────────────────────────────────────┐
-│  📊 ANALYTICS & REPORTING     Power BI / SQL Queries                │
-│  • 30+ business analytics queries                                   │
-│  • Risk segmentation dashboard                                      │
-│  • Executive KPI views                                              │
-└───────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────┐
+│  📊 ANALYTICS & REPORTING     Power BI / SQL Queries            │
+│  • 30+ business analytics queries                               │
+│  • Risk segmentation dashboard                                  │
+│  • Executive KPI views                                          │
+└────────────────────────────────────────────────────────────────┘
 ```
 
 > 📐 See detailed diagrams: [`docs/diagrams/`](docs/diagrams/)
@@ -631,19 +631,23 @@ SELECT TOP 10 * FROM gold.report_customer_risk_summary;
 <summary><b>Click to expand — Key points for interviews and resume discussions</b></summary>
 
 ### "Tell me about this project"
-> *"I built an enterprise-grade data warehouse on SQL Server using the Medallion Architecture pattern. The project processes 60M+ records from the Home Credit Default Risk dataset through three layers—Bronze for raw ingestion, Silver for cleaning and transformation, and Gold for analytics-ready star schema views. The entire pipeline includes 8 source tables, 20+ derived analytical columns, comprehensive data quality validation, and a risk segmentation engine that classifies customers as high, medium, or low risk based on default history, payment behavior, and credit bureau data."*
+> *"I built an enterprise-grade data warehouse on SQL Server using the Medallion Architecture pattern. The project processes 60M+ records from the Home Credit Default Risk dataset through three layers—Bronze for raw data preservation, Silver for cleaning and transformation, and Gold for analytics-ready views. The architecture enables auditable data lineage, robust error handling, and scalable ETL operations."*
 
 ### "Why Medallion Architecture?"
-> *"Medallion Architecture provides clear separation of concerns—each layer has a distinct responsibility. Bronze preserves raw data for auditability and rollback capability, Silver handles data quality and transformations with proper error handling, and Gold provides a clean, optimized dimensional model for analytics. This approach scales well, enables incremental loading, supports regulatory compliance with full data lineage, and makes it easy to identify and fix data quality issues."*
+> *"Medallion Architecture provides clear separation of concerns—each layer has a distinct responsibility. Bronze preserves raw data for auditability and rollback capability, Silver handles data quality and business rule application with detailed transformation logic, and Gold provides optimized views for analytics and reporting. This staged approach makes the pipeline maintainable, testable, and allows incremental improvements without impacting downstream consumers."*
 
 ### "How does the risk segmentation work?"
-> *"The risk model combines three data sources: default history from loan applications, payment behavior from installment records, and bureau credit history. A customer is classified as High Risk if they've defaulted, or have 3+ late payments, or 3+ underpayments, or 2+ overdue credits. Medium Risk includes customers with high credit-to-income ratios, high annuity burdens, or many active credits. The model is implemented in views that join multiple fact tables and apply business logic rules."*
+> *"The risk model combines three data sources: default history from loan applications, payment behavior from installment records, and bureau credit history. A customer is classified as High Risk if they defaulted OR had 3+ late payments OR had 3+ underpayments OR have 2+ overdue credits. Medium Risk includes high credit-to-income ratios (≥5) or high annuity burden (≥0.4) or 5+ active credits. This multi-factor approach captures both historical default risk and current financial stress indicators."*
 
 ### "What data quality measures did you implement?"
-> *"I built a three-layer validation framework covering row count validation (comparing Bronze to Silver to Gold), NULL key checks on business identifiers, duplicate detection using ROW_NUMBER(), referential integrity between facts and dimensions, financial sanity checks (negative income, impossible ratios), categorical standardization verification, and risk segment validation. Each layer has dedicated quality check scripts that can be run independently, with detailed output for troubleshooting."*
+> *"I built a three-layer validation framework covering row count validation (comparing Bronze to Silver to Gold), NULL key checks on business identifiers, duplicate detection using ROW_NUMBER() partitioning, referential integrity checks, financial sanity checks (age > 0, income > 0), and category standardization validation. Each layer has dedicated quality check scripts that run post-load and generate detailed reports of any anomalies."*
 
 ### "What would you improve?"
-> *"Immediate priorities would be: (1) Incremental loading to replace full truncate-and-load, enabling daily or weekly refreshes; (2) ETL logging to an audit table for better operational visibility; (3) SCD Type 2 for customer dimension to track historical changes; (4) Query performance optimization with strategic indexing; (5) Automated scheduling using SQL Agent; (6) Power BI dashboard deployment; (7) eventually migrating to cloud platforms like Azure SQL or Snowflake."*
+> *"Immediate priorities would be: (1) Incremental loading to replace full truncate-and-load, enabling daily or weekly refreshes; (2) ETL logging to an audit table for better operational visibility; (3) Materialized views and strategic indexing for query performance; (4) Power BI dashboard deployment with real-time data refresh; (5) SCD Type 2 dimensions to track customer attribute changes over time; (6) CI/CD automation with GitHub Actions for schema versioning and testing."*
+
+</details>
+
+---
 
 ## 🚀 Future Improvements
 

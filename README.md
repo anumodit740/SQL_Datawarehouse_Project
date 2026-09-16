@@ -99,14 +99,14 @@ This data warehouse transforms **60M+ raw records** across 8 source tables into 
 
 ### What This Project Delivers
 
-✅ End-to-end ETL pipeline from raw CSV to analytics-ready views  
-✅ Comprehensive data cleaning & standardization (20+ derived columns)  
-✅ Star schema dimensional model (1 dimension + 3 facts + 1 report view)  
-✅ Risk segmentation engine (High / Medium / Low risk classification)  
-✅ 30+ business analytics SQL queries  
-✅ Data quality validation framework across all layers  
-✅ Power BI dashboard specifications with DAX measures  
-✅ Complete deployment and troubleshooting documentation  
+✅ End-to-end ETL pipeline from raw CSV to analytics-ready views
+✅ Comprehensive data cleaning & standardization (20+ derived columns)
+✅ Star schema dimensional model (1 dimension + 3 facts + 1 report view)
+✅ Risk segmentation engine (High / Medium / Low risk classification)
+✅ 30+ business analytics SQL queries
+✅ Data quality validation framework across all layers
+✅ Power BI dashboard specifications with DAX measures
+✅ Complete deployment and troubleshooting documentation
 
 ---
 
@@ -242,6 +242,10 @@ This data warehouse transforms **60M+ raw records** across 8 source tables into 
 ## 📐 Data Model — Gold Layer
 
 ```mermaid
+erDiagram
+    dim_customer ||--o{ fact_loan_application : "has"
+    dim_customer ||--o{ fact_payment_behavior : "has"
+    dim_customer ||--o{ fact_credit_history : "has"
 
     dim_customer {
         bigint customer_key PK
@@ -717,8 +721,8 @@ Have questions or suggestions? Please open an [Issue](https://github.com/anumodi
 
 *Built with SQL Server · Medallion Architecture · Star Schema · T-SQL*
 
-**Last Updated:** 2024  
-**Status:** ✅ Production Ready  
+**Last Updated:** 2024
+**Status:** ✅ Production Ready
 **Database:** 🏛️ Tested & Validated
 
 </div>

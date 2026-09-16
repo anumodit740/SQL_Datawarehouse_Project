@@ -242,10 +242,6 @@ This data warehouse transforms **60M+ raw records** across 8 source tables into 
 ## 📐 Data Model — Gold Layer
 
 ```mermaid
-erDiagram
-    dim_customer ||--o{ fact_loan_application : "customer_id"
-    dim_customer ||--o{ fact_payment_behavior : "customer_id"
-    dim_customer ||--o{ fact_credit_history : "customer_id"
 
     dim_customer {
         bigint customer_key PK
